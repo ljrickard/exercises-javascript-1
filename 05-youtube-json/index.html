@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>testing jQuery AJAX request</title>
+</head>
+<body>
+
+	<div></div>
+
+	<button>Youtube.com</button>
+
+	<a href="http://google.com">
+  		<img src="http://i.ytimg.com/vi/hYB0mn5zh2c/default.jpg" alt="HTML tutorial">
+	</a>
+
+	<a href="" <img href="www.google.com" src="http://i.ytimg.com/vi/hYB0mn5zh2c/default.jpg" alt=""></a>
+
+	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script>
+
+		$('button').on('click', function () {
+
+			$.ajax({
+				url: 'youtube.json'
+			})
+			.done(function( youtubeData ) {
+				console.log(youtubeData);
+				console.log(youtubeData.data.items[0].title);
+				var thumb=youtubeData.data.items[0].thumbnail.default;
+				var content=youtubeData.data.items[0].content["5"];
+				$("div").append('a href="'+content+'"img src="'+thumb+'" >');
+			})
+
+		});
+
+	</script>
+</body>
+</html>
