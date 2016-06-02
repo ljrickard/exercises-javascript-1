@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Colors</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		<fieldset>
+
+			<div class="form-group">
+		    <label for="selectColors">Color</label>
+		    <select id="selectColors"></select>
+		 </div>
+		</fieldset>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+
+	<script>
+		$.ajax({
+				url: 'colors.json',
+				dataType: 'json'
+			})
+			.done(function( jsonData ) {
+
+				var htmlOptions = "";
+
+				$.each(jsonData, function(index,colorObject){
+					htmlOptions += '<option value="' + colorObject.value + '">' + colorObject.color + '</option>';
+				})
+
+				$('#selectColors').html( htmlOptions );
+			})
+	</script>
+</body>
+</html>

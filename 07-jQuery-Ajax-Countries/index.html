@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Testing Forms jQuery AJAX</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<style>
+		.container { width:50%; margin:10px auto;}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<form>
+		  <div class="form-group">
+		    <label for="exampleInputEmail1">Email address</label>
+		    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+		  </div>
+		  <div class="form-group">
+		    <label for="exampleInputPassword1">Password</label>
+		    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+		  </div>
+
+		  <div class="form-group">
+		    <label for="selectCountries">Country</label>
+		    <select id="selectCountries"></select>
+		  </div>
+
+		  <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+
+		<div id="result-msg"></div>
+
+	</div>
+	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script>
+
+			// var countries = {
+			// 	"IE" : "Ireland",
+			// 	"ES" : "Spain",
+			// 	"FR" : "France",
+			// 	"IT" : "Italy"
+			// }
+			var htmlOptions = "";
+
+			// $.each( countries, function( prop, value ) {
+			// 	htmlOptions += '<option value="' + prop + '">' + value + '</option>';
+			// })
+
+			// $('#selectCountries').html( htmlOptions );
+
+			$.ajax({
+				url: 'countries.json',
+				dataType: 'json'
+			})
+			.done(function( dataJson ) {
+
+				$.each( dataJson, function( index, objectCountry ) {
+
+					htmlOptions += '<option value="' + objectCountry.code + '">' + objectCountry.name + '</option>';
+				})
+
+				$('#selectCountries').html( htmlOptions );
+
+			})
+
+
+			$('button').on('click', function(event) {
+				event.preventDefault();
+				var userName = $('#exampleInputEmail1').val();
+				var htmlMsg = "<p>Hello " + userName + "!!</p>";
+
+				$('#result-msg').html( htmlMsg );
+				// alert ( "Hello " + userName );
+				console.log ( "Hello " + userName );
+
+			});
+
+			$('#selectCountries').on('change', function(event) {
+				console.log ( $(this).val() );
+			});
+
+
+
+	</script>
+</body>
+</html>
