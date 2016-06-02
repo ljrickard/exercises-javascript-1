@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Donuts challenge</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<style>
+		#user-topping * {
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<form action="#">
+
+			<fieldset>
+				<legend>Specify your order</legend>
+
+				<div>
+					<label for="user-butter">Batter</label>
+					<select id="user-butter"></select>
+				</div>
+
+				<div id="user-topping"></div>
+
+				<button class="btn btn-primary">Order!</button>
+			</fieldset>
+
+		</form>
+	</div>
+	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script>
+
+		$.ajax({
+			url: 'donuts.json'
+		})
+		.done(function( jsonData ) {
+
+			var aBatters = jsonData.batters.batter;
+			var aToppings = jsonData.topping;
+			var optionsBatters = "", checkboxesToppings = "";
+
+			$.each ( aBatters, function( index, oBatter ) {
+				optionsBatters += '<option value="' + oBatter.id +'">'+ oBatter.type +'</option>';
+			})
+
+			$('#user-butter').html(optionsBatters);
+
+			$.each ( aToppings, function( index, oTopping ) {
+				var openContainerTopping = "<div>";
+				var labelTopping = '<label for="' + oTopping.id +'">' + oTopping.type+'</label>'
+				var inputTopping = '<input id="'  + oTopping.id + '" type="checkbox" />';
+				var closeContainerTopping = "</div>";
+				checkboxesToppings += openContainerTopping + inputTopping + labelTopping + closeContainerTopping;
+			})
+
+			$('#user-topping').html(checkboxesToppings);
+
+		})
+
+		$('button').on('click', function ( eventObject ) {
+
+			var selectedBatterValue = $('#user-butter').val();
+			var selectedBatterName = $('#user-butter option:selected').text();
+
+			var selectedToppings = $("input:checked");
+			var numSelectedToppings = selectedToppings.length;
+			var listToppings = " ";
+
+			$.each( selectedToppings, function( index, inputTopping ) {
+					var $currentTopping = $(inputTopping);
+					var nameTopping = $currentTopping.siblings("label").text();
+
+					if (index === 0) {
+						listToppings += nameTopping;
+					}
+					else if (index === numSelectedToppings-1) {
+						listToppings += " and " + nameTopping;
+					}
+					else {
+						listToppings += ", " + nameTopping;
+					}
+
+			})
+
+			// var selectedToppingName = $('#user-topping option:selected').text();
+
+			var finalMsg = '<p>You have ordered a donut with Batter '+selectedBatterName+' (code:'+selectedBatterValue+') and with Toppings <strong>' + listToppings + '</strong></p>'
+
+			$(finalMsg).appendTo( $(".container") );
+
+		});
+
+		$("#user-topping").on('click', "input", function(event) {
+			var siblingLabel = $(this).siblings("label").text();
+
+			if ( siblingLabel === "None") {
+
+				$("#user-topping input:checked").prop( "checked", false );
+				$(this).prop( "checked", true );
+
+				console.log ("It is none!!!");
+			}
+			else {
+				$("#user-topping input").first().	prop( "checked", false );
+			}
+
+		});
+
+	</script>
+</body>
+</html>
