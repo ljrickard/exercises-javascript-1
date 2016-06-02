@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Donuts!</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		<form action="">
+			<fieldset id="go">
+			<legend>Order Your Donut:</legend>
+				<div>
+				    <label for="selectBatter">Select Batter</label>
+				    <select id="selectBatter"></select>
+			 	</div>
+				<div>
+				    <label for="selectToppings">Select Topping</label>
+				    <select id="selectToppings"></select>
+		 		</div>
+				<button class="btn primary" id="go">Go!</button>
+			</fieldset>
+			<div class="output"></div>
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+
+	<script>
+		$.ajax({
+				url: 'donuts.json',
+				dataType: 'json'
+			})
+			.done(function( jsonData ) {
+
+				var htmlBatterOptions = "";
+				var htmlToppingOptions = "";
+				var batters=jsonData.batters.batter;
+				var toppings=jsonData.topping;
+
+				$.each(batters, function(index,batterObject){
+					
+					htmlBatterOptions += '<option value="' + batterObject.id + '">' + batterObject.type + '</option>';
+				})
+
+				$.each(toppings, function(index,toppingObject){
+					
+					htmlToppingOptions += '<option value="' + toppingObject.id + '">' + toppingObject.type + '</option>';
+				})
+
+				$('#selectBatter').html( htmlBatterOptions );
+				$('#selectToppings').html( htmlToppingOptions );
+			})
+
+			$('#go button').on("click", function( eventObject ) {
+				eventObject.preventDefault();
+				
+				var $toppingSelected = $("#selectToppings option:selected");
+				var $toppingVal = $toppingSelected.val();
+				var $toppingText = $toppingSelected.text();
+
+				var $batterSelected = $("#selectBatter option:selected");
+				var $batterVal = $batterSelected.val();
+				var $batterText = $batterSelected.text();
+
+				var $htmlOutput = '<p>You have ordered a dount with ' + $batterText + ' batter topped with ' + $toppingText + '</p>';
+
+				$('.output').html($htmlOutput);
+			})
+
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
